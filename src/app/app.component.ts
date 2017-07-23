@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
 
   // Authorization scopes required by the API; multiple scopes can be
   // included, separated by spaces.
-  SCOPES = 'https://www.googleapis.com/auth/drive.metadata.readonly';
+  SCOPES = 'https://www.googleapis.com/auth/drive';
 
   ngOnInit() {
     window.gapi.load('client:auth2', () => {
@@ -44,15 +44,48 @@ export class AppComponent implements OnInit {
 
   updateSigninStatus(isSignedIn) {
 
-    if(isSignedIn) {
-      window.gapi.client.drive.files.list({
-        'pageSize': 10,
-        'fields': 'nextPageToken, files(id, name)'
-      }).then((response) => {
-        const files = response.result.files;
-        console.log(files);
+    console.log(isSignedIn);
+
+    if (isSignedIn) {
+      // window.gapi.client.drive.files.list({
+      //   'pageSize': 10
+      // }).then((response) => {
+      //   const files = response.result.files;
+      //   // console.log(files);
+      // });
+
+      window.gapi.client.drive.changes.getStartPageToken().then((response) => {
+        console.log(response);
+        console.log(response.result.startPageToken);
+        // setInterval(() => {
+        //   this.getChanges(response.result.startPageToken);
+        // }, 10000);
+
       });
+
+      // window.gapi.client.drive.about.get({
+      //   fields: 'user, storageQuota'
+      // }).then((response) => {
+      //   // console.log(response);
+      // });
+
     }
+  }
+
+  getChanges(token) {
+    console.log(token);
+
+    window.gapi.client.drive.changes.list({
+      pageToken: token
+    }).then((response) => {
+      console.log(response);
+
+      // const newToken = response.result.newStartPageToken;
+      // if (newToken) {
+      //   this.getChanges(newToken);
+      // }
+    });
+
 
   }
 
