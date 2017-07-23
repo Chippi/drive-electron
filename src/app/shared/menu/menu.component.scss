@@ -1,0 +1,14 @@
+@import 'variables';
+
+.menu {
+    border-bottom: 1px solid $color-border;
+    display: flex;
+    height: 60px;
+    position: fixed;
+    width: 100%;
+    z-index: 100;
+
+    &__box {
+        width: 60px;
+    }
+}
